@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
+import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./context/AutContext";
 import Home from "./pages/Home";
+import LoginPage from "./pages/Login";
+import RegisterPage from "./pages/Register";
+import Profile from "./pages/Profile";
 import "admin-lte/dist/css/adminlte.min.css"; 
 import "./index.css"; 
 
@@ -21,11 +25,30 @@ const App: React.FC = () => {
     <AuthProvider>
       <BrowserRouter>
         <div className={`min-h-screen bg-gray-100 text-black dark:bg-black dark:text-white transition-colors`}>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-            </Routes>
-          </Layout>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route 
+              path="/" 
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <Home />
+                  </Layout>
+                </PrivateRoute>
+              } 
+            />
+            <Route 
+              path="/profile/:id" 
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <Profile />
+                  </Layout>
+                </PrivateRoute>
+              } 
+            />
+          </Routes>
         </div>
       </BrowserRouter>
     </AuthProvider>
