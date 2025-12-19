@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AutContext';
+import { useAuth } from '../context/AuthContext';
 import Button from '../components/Button';
-import Card from '../components/Card';
 import Modal from '../components/Modal';
+import ThemeToggle from '../components/ThemeToggle';
 
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
@@ -58,117 +58,97 @@ export default function RegisterPage() {
 
     return (
         <>
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-100 relative overflow-hidden p-4 sm:p-6">
-                {/* Decorative elements - hidden on mobile */}
-                <div className="hidden md:block absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-                <div className="hidden md:block absolute bottom-0 left-0 w-64 h-64 md:w-96 md:h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-                
-                <Card className="w-full max-w-xs sm:max-w-sm relative z-10 border border-blue-100 shadow-2xl p-5 sm:p-6 md:p-8">
-                    {/* Header Icon */}
-                    <div className="flex justify-center mb-3 sm:mb-4">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center shadow-lg">
-                            <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                            </svg>
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-5 md:p-6">
+                <div className="max-w-6xl mx-auto flex items-center justify-center min-h-[80vh]">
+                    <div className="w-full max-w-md bg-white/60 dark:bg-gray-800 rounded-xl p-4 sm:p-6 md:p-8 shadow-sm border border-gray-200 dark:border-gray-700 relative">
+                        <div className="absolute top-3 right-3">
+                            <ThemeToggle />
                         </div>
-                    </div>
-
-                    {/* Title and Subtitle */}
-                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-center bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent mb-1">
-                        Create Account
-                    </h1>
-                    <p className="text-center text-gray-500 mb-4 sm:mb-5 md:mb-6 text-xs sm:text-sm">Join the student directory today</p>
-                    
-                    <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
-                        {error && (
-                            <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-2 sm:p-3 rounded-lg text-xs sm:text-sm">
-                                <p className="font-semibold">Error</p>
-                                <p>{error}</p>
+                        <div className="flex flex-col items-center mb-6">
+                            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-500 rounded-lg flex items-center justify-center shadow mb-2">
+                                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                                </svg>
                             </div>
-                        )}
-
-                        {/* Name Field */}
-                        <div>
-                            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1 sm:mb-1.5">Full Name</label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                required
-                                className="w-full px-3 py-2 sm:py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-600 focus:bg-blue-50 transition-all duration-200 text-xs sm:text-sm text-gray-800 placeholder-gray-400"
-                                placeholder="Enter your full name"
-                            />
+                            <h1 className="text-2xl sm:text-3xl font-semibold text-blue-700 dark:text-white leading-tight mb-1">
+                                Student Directory
+                            </h1>
                         </div>
-
-                        {/* Email Field */}
-                        <div>
-                            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1 sm:mb-1.5">Email Address</label>
-                            <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
-                                className="w-full px-3 py-2 sm:py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-600 focus:bg-blue-50 transition-all duration-200 text-xs sm:text-sm text-gray-800 placeholder-gray-400"
-                                placeholder="you@example.com"
-                            />
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            {error && (
+                                <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-2 sm:p-3 rounded-lg text-xs sm:text-sm mb-2">
+                                    <p className="font-semibold">Error</p>
+                                    <p>{error}</p>
+                                </div>
+                            )}
+                            <div>
+                                <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Full Name</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-3 py-2 border-2 border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-blue-600 focus:bg-blue-50 dark:focus:bg-gray-800 transition-all duration-200 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white/80 dark:bg-gray-900/60 shadow"
+                                    placeholder="Enter your full name"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Email Address</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-3 py-2 border-2 border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-blue-600 focus:bg-blue-50 dark:focus:bg-gray-800 transition-all duration-200 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white/80 dark:bg-gray-900/60 shadow"
+                                    placeholder="you@example.com"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Password</label>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-3 py-2 border-2 border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-blue-600 focus:bg-blue-50 dark:focus:bg-gray-800 transition-all duration-200 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white/80 dark:bg-gray-900/60 shadow"
+                                    placeholder="••••••••"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Confirm Password</label>
+                                <input
+                                    type="password"
+                                    name="confirmPassword"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full px-3 py-2 border-2 border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-blue-600 focus:bg-blue-50 dark:focus:bg-gray-800 transition-all duration-200 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white/80 dark:bg-gray-900/60 shadow"
+                                    placeholder="••••••••"
+                                />
+                            </div>
+                            <Button
+                                type="submit"
+                                isLoading={loading}
+                                fullWidth
+                                className="h-10 text-sm bg-gradient-to-r from-blue-600 to-pink-500 hover:from-blue-700 hover:to-pink-600 shadow-lg rounded-lg"
+                            >
+                                {loading ? 'Creating account...' : 'Register'}
+                            </Button>
+                        </form>
+                        <div className="flex items-center gap-2 sm:gap-3 my-4">
+                            <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
+                            <span className="text-gray-400 text-xs">Already have an account?</span>
+                            <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
                         </div>
-
-                        {/* Password Field */}
-                        <div>
-                            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1 sm:mb-1.5">Password</label>
-                            <input
-                                type="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                required
-                                className="w-full px-3 py-2 sm:py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-600 focus:bg-blue-50 transition-all duration-200 text-xs sm:text-sm text-gray-800 placeholder-gray-400"
-                                placeholder="••••••••"
-                            />
-                        </div>
-
-                        {/* Confirm Password Field */}
-                        <div>
-                            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1 sm:mb-1.5">Confirm Password</label>
-                            <input
-                                type="password"
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                required
-                                className="w-full px-3 py-2 sm:py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-600 focus:bg-blue-50 transition-all duration-200 text-xs sm:text-sm text-gray-800 placeholder-gray-400"
-                                placeholder="••••••••"
-                            />
-                        </div>
-
-                        {/* Register Button */}
-                        <Button 
-                            type="submit" 
-                            isLoading={loading} 
-                            fullWidth
-                            className="mt-4 sm:mt-5 h-9 sm:h-10 text-xs sm:text-sm"
-                        >
-                            {loading ? 'Creating account...' : 'Register'}
-                        </Button>
-                    </form>
-
-                    {/* Divider */}
-                    <div className="flex items-center gap-2 sm:gap-3 my-3 sm:my-4">
-                        <div className="flex-1 h-px bg-gray-200"></div>
-                        <span className="text-gray-400 text-xs">Already have an account?</span>
-                        <div className="flex-1 h-px bg-gray-200"></div>
+                        <a href="/login" className="inline-flex items-center justify-center w-full px-3 py-2 border-2 border-pink-500 text-pink-600 font-semibold text-sm rounded-lg hover:bg-pink-50 dark:hover:bg-pink-900/10 transition-all duration-200 shadow">
+                            Back to Login
+                        </a>
                     </div>
-
-                    {/* Login Link */}
-                    <a href="/login" className="inline-flex items-center justify-center w-full px-3 py-2 sm:py-2.5 border-2 border-blue-600 text-blue-600 font-semibold text-xs sm:text-sm rounded-lg hover:bg-blue-50 transition-all duration-200">
-                        Back to Login
-                    </a>
-                </Card>
+                </div>
             </div>
-
-            {/* Success Modal */}
             <Modal
                 isOpen={showSuccessModal}
                 title="Registration Successful"

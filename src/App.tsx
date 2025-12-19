@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import PrivateRoute from "./components/PrivateRoute";
-import { AuthProvider } from "./context/AutContext";
 import Home from "./pages/Home";
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
@@ -22,9 +21,8 @@ const App: React.FC = () => {
   }, [theme]);
 
   return (
-    <AuthProvider>
       <BrowserRouter>
-        <div className={`min-h-screen bg-gray-100 text-black dark:bg-black dark:text-white transition-colors`}>
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-black dark:text-white transition-colors">
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -51,7 +49,6 @@ const App: React.FC = () => {
           </Routes>
         </div>
       </BrowserRouter>
-    </AuthProvider>
   );
 };
 
