@@ -2,7 +2,8 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Card from '../components/Card';
 import Button from '../components/Button';
-import ThemeToggle from '../components/ThemeToggle';
+import ThemeToggle from '../components/ui/ThemeToggle';
+import { useTheme } from '../hooks/useTheme';
 
 interface Student {
     id: number;
@@ -25,6 +26,7 @@ const mockStudents: Student[] = [
 const Profile: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const { theme, setTheme } = useTheme();
     
     const student = mockStudents.find(s => s.id === parseInt(id || '0'));
 
@@ -39,9 +41,9 @@ const Profile: React.FC = () => {
                 </div>
                 <div className="max-w-3xl mx-auto relative z-10">
                     <div className="flex justify-end mb-4">
-                        <ThemeToggle />
+                        <ThemeToggle theme={theme} setTheme={setTheme} />
                     </div>
-                    <Card className="text-center py-12 rounded-3xl shadow-2xl">
+                    <Card className="text-center py-12 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700">
                         <p className="text-gray-500 dark:text-gray-300 text-lg mb-4">Student not found.</p>
                         <Button onClick={() => navigate('/')} variant="primary">
                             Back to Directory
@@ -62,7 +64,7 @@ const Profile: React.FC = () => {
             </div>
             <div className="max-w-3xl mx-auto relative z-10">
                 <div className="flex justify-end mb-4">
-                    <ThemeToggle />
+                    <ThemeToggle theme={theme} setTheme={setTheme} />
                 </div>
                 {/* Back Button */}
                 <button
@@ -75,7 +77,7 @@ const Profile: React.FC = () => {
                     Back to Directory
                 </button>
                 {/* Profile Card */}
-                <Card className="text-center mb-6 rounded-3xl shadow-2xl p-8">
+                <Card className="text-center mb-6 rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
                     <div className="flex justify-center mb-4">
                         <span className="text-7xl drop-shadow-lg animate-pulse">{student.image}</span>
                     </div>

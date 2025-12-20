@@ -2,13 +2,23 @@ import type React from "react"
 import { FaBell, FaUserCircle } from "react-icons/fa"
 import ThemeToggle from "../ui/ThemeToggle"
 import Dropdown from "../ui/DropDown"
+import { useNavigate } from "react-router-dom"
+
+type Theme = "light" | "dark"
 
 interface TopNavProps {
-  theme: string
-  setTheme: (theme: string) => void
+  theme: Theme
+  setTheme: (theme: Theme) => void
 }
 
 const TopNav: React.FC<TopNavProps> = ({ theme, setTheme }) => {
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    localStorage.removeItem("user")
+    navigate("/login")
+  }
+
   return (
     <header className="p-4 flex justify-between items-center shadow-md">
       <div className="flex items-center gap-3">
@@ -44,9 +54,16 @@ const TopNav: React.FC<TopNavProps> = ({ theme, setTheme }) => {
           </ul>
         </Dropdown>
 
-        <div>
-          <FaUserCircle className="text-2xl" />
-        </div>
+        <Dropdown buttonContent={<FaUserCircle className="text-2xl cursor-pointer" />}>
+          <div className="py-2 px-2 min-w-[8rem] max-w-[12rem] flex flex-col items-center">
+            <button
+              onClick={handleLogout}
+              className="w-full text-center text-red-600 dark:text-red-400 font-semibold hover:underline transition-colors"
+            >
+              Logout
+            </button>
+          </div>
+        </Dropdown>
       </div>
     </header>
   )

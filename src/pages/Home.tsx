@@ -334,14 +334,14 @@ const Home: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-5 md:p-6">
-            <div className="max-w-6xl mx-auto">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-2 sm:p-4 md:p-6">
+            <div className="w-full max-w-full mx-auto">
                 {/* Search + Filters Container */}
-                <Card className="mb-6 p-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                <Card className="mb-3 sm:mb-5 p-2 sm:p-4">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
                         {/* Search */}
                         <div className="w-full sm:flex-1">
-                            <div className="max-w-2xl w-full mx-auto sm:mx-0">
+                            <div className="w-full max-w-full mx-auto sm:mx-0">
                                 <SearchBar
                                     placeholder="Search by name, email or keyword..."
                                     value={searchTerm}
@@ -351,27 +351,28 @@ const Home: React.FC = () => {
                         </div>
 
                         {/* Filters & View toggles */}
-                        <div className="flex items-center gap-2 sm:gap-3">
-                            <select
-                                value={selectedMajor}
-                                onChange={(e) => setSelectedMajor(e.target.value)}
-                                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-600 bg-white dark:bg-gray-900 text-sm text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 shadow-sm"
-                            >
-                                {allMajors.map(major => (
-                                    <option key={major} value={major}>{major}</option>
-                                ))}
-                            </select>
-                            <select
-                                value={selectedYear}
-                                onChange={(e) => setSelectedYear(e.target.value)}
-                                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-600 bg-white dark:bg-gray-900 text-sm text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 shadow-sm"
-                            >
-                                {years.map(year => (
-                                    <option key={year} value={year}>{year}</option>
-                                ))}
-                            </select>
-
-                            <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3 w-full sm:w-auto">
+                            <div className="flex flex-col gap-2 w-full sm:flex-row sm:gap-2 sm:w-auto">
+                                <select
+                                    value={selectedMajor}
+                                    onChange={(e) => setSelectedMajor(e.target.value)}
+                                    className="w-full sm:w-auto px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-600 bg-white dark:bg-gray-900 text-sm text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 shadow-sm"
+                                >
+                                    {allMajors.map(major => (
+                                        <option key={major} value={major}>{major}</option>
+                                    ))}
+                                </select>
+                                <select
+                                    value={selectedYear}
+                                    onChange={(e) => setSelectedYear(e.target.value)}
+                                    className="w-full sm:w-auto px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-600 bg-white dark:bg-gray-900 text-sm text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 shadow-sm"
+                                >
+                                    {years.map(year => (
+                                        <option key={year} value={year}>{year}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-lg p-1 w-full sm:w-auto justify-center sm:justify-start">
                                 <button
                                     onClick={() => setViewMode('grid')}
                                     className={`p-2 rounded-md ${viewMode === 'grid' ? 'bg-blue-600 text-white' : 'text-gray-600 dark:text-gray-300'}`}
@@ -395,7 +396,7 @@ const Home: React.FC = () => {
                     </div>
 
                     {/* Results Count */}
-                    <div className="mt-3">
+                    <div className="mt-2">
                         <p className="text-sm text-gray-600 dark:text-white">
                             Found <span className="font-semibold text-blue-600 dark:text-blue-400">{filteredStudents.length}</span> result{filteredStudents.length !== 1 ? 's' : ''}
                         </p>
@@ -404,39 +405,45 @@ const Home: React.FC = () => {
 
                 {/* Students Display */}
                 {filteredStudents.length > 0 ? (
-                    <div className={viewMode === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" : "space-y-4"}>
+                    <div
+                        className={
+                            viewMode === 'grid'
+                                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 w-full"
+                                : "flex flex-col space-y-4 w-full"
+                        }
+                    >
                         {filteredStudents.map(student => (
                             <Card
                                 key={student.id}
                                 className={`
-                                    group cursor-pointer shadow-sm hover:shadow-md transition-all duration-200 p-4
+                                    group cursor-pointer shadow-sm hover:shadow-md transition-all duration-200 p-3 sm:p-4 w-full max-w-full
                                     ${viewMode === 'list' ? 'flex items-center' : 'flex-col items-center'}
                                 `}
                                 onClick={() => handleCardClick(student)}
                             >
-                                <div className={`flex ${viewMode === 'list' ? 'w-full' : 'flex-col items-center justify-center h-full flex-1'}`}>
+                                <div className={`flex w-full ${viewMode === 'list' ? '' : 'flex-col items-center justify-center h-full flex-1'}`}>
                                     <img
                                         src={student.image}
                                         alt={student.name}
                                         onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/images/default-avatar.png'; }}
                                         className={`${
                                             viewMode === 'list'
-                                                ? 'w-16 h-16 mr-4 flex-shrink-0 rounded-md mb-4 object-cover'
-                                                : 'w-32 h-32 mb-4 rounded-md object-cover'
+                                                ? 'w-14 h-14 sm:w-16 sm:h-16 mr-3 sm:mr-4 flex-shrink-0 rounded-md mb-3 sm:mb-4 object-cover'
+                                                : 'w-24 h-24 sm:w-32 sm:h-32 mb-3 sm:mb-4 rounded-md object-cover'
                                         }`}
                                     />
                                     <div className={`${viewMode === 'grid' ? 'flex flex-col items-center justify-center flex-1 text-center' : 'flex-1'}`}>
                                         <div className={`flex ${viewMode === 'grid' ? 'flex-col items-center justify-center' : 'justify-between items-start'} mb-2 w-full`}>
-                                            <h3 className={`text-lg font-semibold text-gray-800 dark:text-white ${viewMode === 'grid' ? 'text-center' : ''}`}>
+                                            <h3 className={`text-base sm:text-lg font-semibold text-gray-800 dark:text-white ${viewMode === 'grid' ? 'text-center' : ''}`}>
                                                 {student.name}
                                             </h3>
                                             {/* Removed action buttons */}
                                         </div>
-                                        <p className={`text-sm text-gray-600 dark:text-gray-200 ${viewMode === 'grid' ? 'text-center' : ''}`}>
+                                        <p className={`text-xs sm:text-sm text-gray-600 dark:text-gray-200 ${viewMode === 'grid' ? 'text-center' : ''}`}>
                                             {student.department} • {student.graduationYear}
                                         </p>
                                         {viewMode === 'list' && (
-                                            <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">
+                                            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-300 mt-1">
                                                 <a
                                                     href={`mailto:${student.email}`}
                                                     className="text-blue-600 hover:underline dark:text-blue-400"
@@ -452,35 +459,35 @@ const Home: React.FC = () => {
                         ))}
                     </div>
                 ) : (
-                    <Card className="text-center py-12">
-                        <p className="text-gray-500 dark:text-gray-300 text-lg">No students found matching your criteria.</p>
+                    <Card className="text-center py-8 sm:py-12 w-full max-w-full">
+                        <p className="text-gray-500 dark:text-gray-300 text-base sm:text-lg">No students found matching your criteria.</p>
                     </Card>
                 )}
             </div>
 
             {/* Modal */}
             {selectedStudent && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-fadeIn">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md w-full max-h-[90vh] overflow-y-auto animate-scaleIn">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4 animate-fadeIn">
+                    <div className="bg-white dark:bg-gray-800/90 rounded-lg shadow-lg w-full max-w-xs sm:max-w-md max-h-[90vh] overflow-y-auto animate-scaleIn border border-gray-200 dark:border-gray-700">
                         <div className="relative">
-                            <button onClick={closeModal} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-white">
+                            <button onClick={closeModal} className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-white">
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                                     <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"/>
                                 </svg>
                             </button>
-                            <div className="p-6">
+                            <div className="p-4 sm:p-6">
                                 <img
                                     src={selectedStudent.image}
                                     alt={selectedStudent.name}
                                     onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/images/default-avatar.png'; }}
-                                    className="w-48 h-48 rounded-full object-cover mx-auto mb-4"
+                                    className="w-32 h-32 sm:w-48 sm:h-48 rounded-full object-cover mx-auto mb-3 sm:mb-4"
                                 />
-                                <h2 className="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white flex justify-center items-center">
+                                <h2 className="text-xl sm:text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white flex justify-center items-center">
                                     {selectedStudent.name}
                                 </h2>
-                                <p className="text-center text-gray-600 dark:text-gray-200 mb-4">{selectedStudent.department} • {selectedStudent.graduationYear}</p>
+                                <p className="text-center text-gray-600 dark:text-gray-200 mb-3 sm:mb-4">{selectedStudent.department} • {selectedStudent.graduationYear}</p>
                                 {selectedStudent.bio && (
-                                    <p className="text-sm text-gray-700 dark:text-gray-100 mb-4 text-center">{selectedStudent.bio}</p>
+                                    <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-100 mb-3 sm:mb-4 text-center">{selectedStudent.bio}</p>
                                 )}
                                 <div className="space-y-2">
                                     {/* Contact clickable */}
@@ -493,7 +500,7 @@ const Home: React.FC = () => {
                                                         {email && (
                                                             <a
                                                                 href={`mailto:${email}`}
-                                                                className="text-blue-600 hover:underline dark:text-blue-400 text-sm"
+                                                                className="text-blue-600 hover:underline dark:text-blue-400 text-xs sm:text-sm"
                                                             >
                                                                 {email}
                                                             </a>
@@ -501,7 +508,7 @@ const Home: React.FC = () => {
                                                         {phone && (
                                                             <a
                                                                 href={`tel:${phone.replace(/[^+\d]/g, '')}`}
-                                                                className="text-blue-600 hover:underline dark:text-blue-400 text-sm"
+                                                                className="text-blue-600 hover:underline dark:text-blue-400 text-xs sm:text-sm"
                                                             >
                                                                 {phone}
                                                             </a>
@@ -514,7 +521,7 @@ const Home: React.FC = () => {
                                     {/* Social Links with icons */}
                                     {selectedStudent.socialLinks && (
                                         <div>
-                                            <strong className="text-sm">Social Links:</strong>
+                                            <strong className="text-xs sm:text-sm">Social Links:</strong>
                                             <div className="flex gap-2 mt-1 flex-wrap">
                                                 {Object.entries(selectedStudent.socialLinks).map(([platform, link]) => (
                                                     <a
@@ -522,7 +529,7 @@ const Home: React.FC = () => {
                                                         href={link}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="flex items-center gap-1 text-blue-600 hover:underline text-sm capitalize"
+                                                        className="flex items-center gap-1 text-blue-600 hover:underline text-xs sm:text-sm capitalize"
                                                     >
                                                         {platform === "linkedin" && (
                                                             <svg className="w-4 h-4 text-blue-700" fill="currentColor" viewBox="0 0 24 24">

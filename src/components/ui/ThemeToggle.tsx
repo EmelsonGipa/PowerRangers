@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { Moon, Sun } from "lucide-react";
 
+type Theme = "light" | "dark";
+
 interface ThemeToggleProps {
-  theme: string;
-  setTheme: (theme: string) => void;
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
 }
 
 const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, setTheme }) => {
@@ -11,7 +13,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, setTheme }) => {
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
-      setTheme(savedTheme);
+      setTheme(savedTheme as Theme);
       if (savedTheme === "dark") {
         document.documentElement.classList.add("dark");
       } else {

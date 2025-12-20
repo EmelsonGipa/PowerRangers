@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -11,16 +11,6 @@ import "./index.css";
 import { AuthProvider } from "./context/AuthContext";
 
 const App: React.FC = () => {
-  const [theme] = useState(localStorage.getItem("theme") || "light");
-
-  useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [theme]);
-
   return (
     <AuthProvider>
       <BrowserRouter>
