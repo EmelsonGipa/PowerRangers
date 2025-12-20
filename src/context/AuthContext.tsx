@@ -1,84 +1,59 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-
-interface User {
-    id: string;
-    name: string;
-    email: string;
-}
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface AuthContextType {
-    isAuthenticated: boolean;
-    user: User | null;
-    login: (email: string, password: string) => Promise<void>;
-    register: (name: string, email: string, password: string) => Promise<void>;
-    logout: () => void;
+  user: any;
+  isAuthenticated: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  register: (name: string, email: string, password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState<User | null>(null);
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<any>(null);
 
-    useEffect(() => {
-        // Check if user is already logged in
-        const storedUser = localStorage.getItem('currentUser');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-            setIsAuthenticated(true);
-        }
-    }, []);
+  useEffect(() => {
+    const stored = localStorage.getItem("user");
+    if (stored) setUser(JSON.parse(stored));
+  }, []);
 
-    const register = async (name: string, email: string, password: string) => {
-        // Check if user already exists
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        if (users.some((u: any) => u.email === email)) {
-            throw new Error('Email already registered');
-        }
+  const login = async (email: string, _password: string) => {
+    // Replace with real API/auth logic as needed
+    // For demo, accept any email/password and store user
+    const fakeUser = { email, name: email.split("@")[0] };
+    localStorage.setItem("user", JSON.stringify(fakeUser));
+    setUser(fakeUser);
+  };
 
-        // Create new user
-        const newUser = {
-            id: Date.now().toString(),
-            name,
-            email,
-            password, // Note: Never store passwords in localStorage in production!
-        };
+  const logout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+  };
 
-        users.push(newUser);
-        localStorage.setItem('users', JSON.stringify(users));
-    };
+  const register = async (_name: string, _email: string, _password: string) => {
+    // Replace with real register logic as needed
+    // For demo, just resolve
+    return Promise.resolve();
+  };
 
-    const login = async (email: string, password: string) => {
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        const foundUser = users.find((u: any) => u.email === email && u.password === password);
-
-        if (!foundUser) {
-            throw new Error('Invalid email or password');
-        }
-
-        const loggedInUser = { id: foundUser.id, name: foundUser.name, email: foundUser.email };
-        setUser(loggedInUser);
-        setIsAuthenticated(true);
-        localStorage.setItem('currentUser', JSON.stringify(loggedInUser));
-    };
-
-    const logout = () => {
-        setUser(null);
-        setIsAuthenticated(false);
-        localStorage.removeItem('currentUser');
-    };
-
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, user, login, register, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated: !!user,
+        login,
+        logout,
+        register,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
-};
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within an AuthProvider");
+  return ctx;
+}

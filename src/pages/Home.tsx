@@ -1,8 +1,6 @@
 import React, { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import Card from "../components/Card";
-import ThemeToggle from "../components/ThemeToggle";
 
 interface Student {
     id: number;
@@ -312,7 +310,6 @@ const Home: React.FC = () => {
     const [selectedYear, setSelectedYear] = useState("All");
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-    const navigate = useNavigate();
 
     // Filtered students
     const filteredStudents = useMemo(() => {
@@ -326,17 +323,6 @@ const Home: React.FC = () => {
     }, [searchTerm, selectedMajor, selectedYear]);
 
     // Dynamic majors from filtered students, always at least 8 if possible
-    const majors = useMemo(
-        () => [
-            "All",
-            ...Array.from(
-                new Set(
-                    (filteredStudents.length > 0 ? filteredStudents : mockStudents).map(s => s.department)
-                )
-            ).sort()
-        ],
-        [filteredStudents]
-    );
     const years = ["All", ...Array.from(new Set(mockStudents.map(s => s.graduationYear)))];
 
     const handleCardClick = (student: Student) => {
@@ -351,7 +337,7 @@ const Home: React.FC = () => {
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-5 md:p-6">
             <div className="max-w-6xl mx-auto">
                 {/* Search + Filters Container */}
-                <div className="bg-white/60 dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+                <Card className="mb-6 p-4">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                         {/* Search */}
                         <div className="w-full sm:flex-1">
@@ -369,7 +355,7 @@ const Home: React.FC = () => {
                             <select
                                 value={selectedMajor}
                                 onChange={(e) => setSelectedMajor(e.target.value)}
-                                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 bg-white dark:bg-gray-800 text-sm dark:text-white dark:border-gray-600 shadow-sm"
+                                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-600 bg-white dark:bg-gray-900 text-sm text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 shadow-sm"
                             >
                                 {allMajors.map(major => (
                                     <option key={major} value={major}>{major}</option>
@@ -378,7 +364,7 @@ const Home: React.FC = () => {
                             <select
                                 value={selectedYear}
                                 onChange={(e) => setSelectedYear(e.target.value)}
-                                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 bg-white dark:bg-gray-800 text-sm dark:text-white dark:border-gray-600 shadow-sm"
+                                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-600 bg-white dark:bg-gray-900 text-sm text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 shadow-sm"
                             >
                                 {years.map(year => (
                                     <option key={year} value={year}>{year}</option>
@@ -414,7 +400,7 @@ const Home: React.FC = () => {
                             Found <span className="font-semibold text-blue-600 dark:text-blue-400">{filteredStudents.length}</span> result{filteredStudents.length !== 1 ? 's' : ''}
                         </p>
                     </div>
-                </div>
+                </Card>
 
                 {/* Students Display */}
                 {filteredStudents.length > 0 ? (
@@ -423,12 +409,12 @@ const Home: React.FC = () => {
                             <Card
                                 key={student.id}
                                 className={`
-                                    group cursor-pointer border-gray-200 dark:border-gray-600 shadow-sm hover:shadow-md transition-all duration-200 p-4
+                                    group cursor-pointer shadow-sm hover:shadow-md transition-all duration-200 p-4
                                     ${viewMode === 'list' ? 'flex items-center' : 'flex-col items-center'}
                                 `}
                                 onClick={() => handleCardClick(student)}
                             >
-                                <div className={`flex ${viewMode === 'list' ? 'w-full' : 'flex-col items-center'}`}>
+                                <div className={`flex ${viewMode === 'list' ? 'w-full' : 'flex-col items-center justify-center h-full flex-1'}`}>
                                     <img
                                         src={student.image}
                                         alt={student.name}
@@ -439,12 +425,16 @@ const Home: React.FC = () => {
                                                 : 'w-32 h-32 mb-4 rounded-md object-cover'
                                         }`}
                                     />
-                                    <div className="flex-1">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{student.name}</h3>
+                                    <div className={`${viewMode === 'grid' ? 'flex flex-col items-center justify-center flex-1 text-center' : 'flex-1'}`}>
+                                        <div className={`flex ${viewMode === 'grid' ? 'flex-col items-center justify-center' : 'justify-between items-start'} mb-2 w-full`}>
+                                            <h3 className={`text-lg font-semibold text-gray-800 dark:text-white ${viewMode === 'grid' ? 'text-center' : ''}`}>
+                                                {student.name}
+                                            </h3>
                                             {/* Removed action buttons */}
                                         </div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-200">{student.department} • {student.graduationYear}</p>
+                                        <p className={`text-sm text-gray-600 dark:text-gray-200 ${viewMode === 'grid' ? 'text-center' : ''}`}>
+                                            {student.department} • {student.graduationYear}
+                                        </p>
                                         {viewMode === 'list' && (
                                             <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">
                                                 <a
@@ -462,7 +452,7 @@ const Home: React.FC = () => {
                         ))}
                     </div>
                 ) : (
-                    <Card className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+                    <Card className="text-center py-12">
                         <p className="text-gray-500 dark:text-gray-300 text-lg">No students found matching your criteria.</p>
                     </Card>
                 )}
@@ -485,7 +475,9 @@ const Home: React.FC = () => {
                                     onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/images/default-avatar.png'; }}
                                     className="w-48 h-48 rounded-full object-cover mx-auto mb-4"
                                 />
-                                <h2 className="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white">{selectedStudent.name}</h2>
+                                <h2 className="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white flex justify-center items-center">
+                                    {selectedStudent.name}
+                                </h2>
                                 <p className="text-center text-gray-600 dark:text-gray-200 mb-4">{selectedStudent.department} • {selectedStudent.graduationYear}</p>
                                 {selectedStudent.bio && (
                                     <p className="text-sm text-gray-700 dark:text-gray-100 mb-4 text-center">{selectedStudent.bio}</p>
