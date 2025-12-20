@@ -1,21 +1,11 @@
 import type React from "react"
-import { useEffect, useState } from "react"
+import { useTheme } from "../../hooks/useTheme"
 // import Sidebar from "./SideBar"
 import TopNav from "./TopNav"
 import Footer from "./Footer"
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light")
-
-  useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark")
-      localStorage.setItem("theme", "dark")
-    } else {
-      document.documentElement.classList.remove("dark")
-      localStorage.setItem("theme", "light")
-    }
-  }, [theme])
+  const { theme, setTheme } = useTheme();
 
   return (
     <div
@@ -25,12 +15,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <div
         className="flex flex-col flex-1 transition-all duration-300 ease-in-out"
       >
-        <TopNav
-          theme={theme}
-          setTheme={setTheme}
-          // isSidebarOpen={isSidebarOpen}
-          // setIsSidebarOpen={setIsSidebarOpen}
-        />
+        <TopNav theme={theme} setTheme={setTheme} />
         <main className="flex-1 p-6 overflow-auto">{children}</main>
         <Footer />
       </div>

@@ -1,109 +1,57 @@
-import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
-import ProfileDropdown from '../components/ProfileDropdown';
 
-export default function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [, setFocusedField] = useState<string | null>(null);
-    const { login, logout } = useAuth();
+export default function Navbar() {
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem('user'));
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError('');
-        setLoading(true);
+    useEffect(() => {
+        // Listen for login/logout changes in localStorage
+        const handler = () => setIsAuthenticated(!!localStorage.getItem('user'));
+        window.addEventListener('storage', handler);
+        return () => window.removeEventListener('storage', handler);
+    }, []);
 
-        try {
-            await login(email, password);
-            navigate('/');
-        } catch (err) {
-            setError((err as Error).message || 'Login failed. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
+    // Optionally, update state after login/logout in this tab
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIsAuthenticated(!!localStorage.getItem('user'));
+        }, 500);
+        return () => clearInterval(interval);
+    }, []);
 
-    // Logout handler
     const handleLogout = () => {
-        logout();
+        localStorage.removeItem('user');
+        setIsAuthenticated(false);
         navigate('/login');
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-5 md:p-6">
-            <div className="max-w-6xl mx-auto flex items-center justify-center min-h-[80vh]">
-                {/* Add a navbar with logout button at the top */}
-                <nav className="absolute top-0 left-0 w-full flex justify-end p-4 z-10">
+        <nav className="w-full flex justify-end items-center px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
+            {isAuthenticated ? (
+                <Button
+                    onClick={handleLogout}
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow"
+                >
+                    Logout
+                </Button>
+            ) : (
+                <div className="flex gap-2">
                     <Button
-                        onClick={handleLogout}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow"
+                        onClick={() => navigate('/login')}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow"
                     >
-                        Logout
+                        Login
                     </Button>
-                </nav>
-                <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl p-4 sm:p-6 md:p-8 shadow-sm border border-gray-200 dark:border-gray-700 relative">
-                    <div className="flex flex-col items-center mb-6">
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-500 rounded-lg flex items-center justify-center shadow mb-2">
-                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                            </svg>
-                        </div>
-                        <h1 className="text-2xl sm:text-3xl font-semibold text-blue-700 dark:text-white leading-tight mb-1">
-                            Student Directory
-                        </h1>
-                    </div>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        {error && (
-                            <div className="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 text-red-700 dark:text-red-300 p-2 sm:p-3 rounded-lg text-xs sm:text-sm mb-2">
-                                <p className="font-semibold">Login Failed</p>
-                                <p>{error}</p>
-                            </div>
-                        )}
-                        <div>
-                            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Email Address</label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                onFocus={() => setFocusedField('email')}
-                                onBlur={() => setFocusedField(null)}
-                                required
-                                className="w-full px-3 py-2 border-2 border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-blue-600 focus:bg-blue-50 dark:focus:bg-gray-900 transition-all duration-200 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-900 shadow"
-                                placeholder="you@example.com"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Password</label>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                onFocus={() => setFocusedField('password')}
-                                onBlur={() => setFocusedField(null)}
-                                required
-                                className="w-full px-3 py-2 border-2 border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-blue-600 focus:bg-blue-50 dark:focus:bg-gray-900 transition-all duration-200 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-900 shadow"
-                                placeholder="••••••••"
-                            />
-                        </div>
-                        <Button type="submit" isLoading={loading} fullWidth className="h-10 text-sm bg-gradient-to-r from-blue-600 to-pink-500 hover:from-blue-700 hover:to-pink-600 shadow-lg rounded-lg">
-                            {loading ? 'Logging in...' : 'Login'}
-                        </Button>
-                    </form>
-                    <div className="flex items-center gap-2 sm:gap-3 my-4">
-                        <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
-                        <span className="text-gray-400 text-xs">New here?</span>
-                        <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
-                    </div>
-                    <a href="/register" className="inline-flex items-center justify-center w-full px-3 py-2 border-2 border-pink-500 text-pink-600 font-semibold text-sm rounded-lg hover:bg-pink-50 dark:hover:bg-pink-900/10 transition-all duration-200 shadow">
-                        Create New Account
-                    </a>
+                    <Button
+                        onClick={() => navigate('/register')}
+                        className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg shadow"
+                    >
+                        Register
+                    </Button>
                 </div>
-            </div>
-        </div>
+            )}
+        </nav>
     );
 }
