@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
-import PrivateRoute from "./components/PrivateRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
 import Profile from "./pages/Profile";
 import "admin-lte/dist/css/adminlte.min.css"; 
 import "./index.css"; 
+import { AuthProvider } from "./context/AuthContext";
 
 const App: React.FC = () => {
   const [theme] = useState(localStorage.getItem("theme") || "light");
@@ -21,6 +22,7 @@ const App: React.FC = () => {
   }, [theme]);
 
   return (
+    <AuthProvider>
       <BrowserRouter>
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-black dark:text-white transition-colors">
           <Routes>
@@ -29,26 +31,27 @@ const App: React.FC = () => {
             <Route 
               path="/" 
               element={
-                <PrivateRoute>
+                <ProtectedRoute>
                   <Layout>
                     <Home />
                   </Layout>
-                </PrivateRoute>
+                </ProtectedRoute>
               } 
             />
             <Route 
               path="/profile/:id" 
               element={
-                <PrivateRoute>
+                <ProtectedRoute>
                   <Layout>
                     <Profile />
                   </Layout>
-                </PrivateRoute>
+                </ProtectedRoute>
               } 
             />
           </Routes>
         </div>
       </BrowserRouter>
+    </AuthProvider>
   );
 };
 

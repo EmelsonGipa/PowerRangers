@@ -1,18 +1,23 @@
 import React from "react";
 
-type CardProps = React.HTMLAttributes<HTMLDivElement> & {
-    children?: React.ReactNode;
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string;
-};
+    children: React.ReactNode;
+}
 
-const Card: React.FC<CardProps> = ({ children, className = "", ...rest }) => {
-    // Default supports dark mode: use #1f2937 for dark background and smooth transitions
-    const base = "bg-white dark:bg-[#1f2937] text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600 rounded-xl transition-colors";
-    return (
-        <div {...rest} className={`${base} ${className}`}>
-            {children}
-        </div>
-    );
-};
+const Card: React.FC<CardProps> = ({ className = "", children, ...props }) => (
+    <div
+        className={`
+            bg-white dark:bg-gray-800
+            text-black dark:text-gray-100
+            border border-gray-200 dark:border-gray-700
+            rounded-xl
+            ${className}
+        `}
+        {...props}
+    >
+        {children}
+    </div>
+);
 
 export default Card;
