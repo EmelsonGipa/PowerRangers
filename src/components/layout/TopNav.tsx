@@ -1,28 +1,35 @@
 import type React from "react"
 import { FaBell, FaUserCircle } from "react-icons/fa"
-import { LogOutIcon, MenuIcon } from "lucide-react"
-import { Link } from "react-router-dom"
-import Dropdown from "../ui/DropDown"
 import ThemeToggle from "../ui/ThemeToggle"
+import Dropdown from "../ui/DropDown"
 
 interface TopNavProps {
   theme: string
   setTheme: (theme: string) => void
-  isSidebarOpen: boolean
-  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const TopNav: React.FC<TopNavProps> = ({ theme, setTheme, isSidebarOpen, setIsSidebarOpen }) => {
+const TopNav: React.FC<TopNavProps> = ({ theme, setTheme }) => {
   return (
     <header className="p-4 flex justify-between items-center shadow-md">
       <div className="flex items-center gap-3">
-        <button
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="flex items-center justify-center w-10 h-10 hover:bg-gray-200 dark:hover:bg-gray-800 transition rounded-lg"
-        >
-          <MenuIcon size={24} />
-        </button>
-        <h1 className="text-xl font-bold">Welcome, Admin</h1>
+        <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-500 rounded-lg flex items-center justify-center shadow">
+          <svg
+            className="w-5 h-5 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+            />
+          </svg>
+        </div>
+        <h1 className="text-xl font-bold text-blue-700 dark:text-white">
+          Student Directory
+        </h1>
       </div>
 
       <div className="flex items-center space-x-6">
@@ -37,23 +44,9 @@ const TopNav: React.FC<TopNavProps> = ({ theme, setTheme, isSidebarOpen, setIsSi
           </ul>
         </Dropdown>
 
-        <Dropdown buttonContent={<FaUserCircle className="text-2xl cursor-pointer" />}>
-          <ul>
-            <li>
-              <Link to="/personal-information" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                Show Profile
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/log-out"
-                className="w-full px-4 flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                <LogOutIcon size={16} /> <span>Logout</span>
-              </Link>
-            </li>
-          </ul>
-        </Dropdown>
+        <div>
+          <FaUserCircle className="text-2xl" />
+        </div>
       </div>
     </header>
   )
